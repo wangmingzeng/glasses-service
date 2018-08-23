@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	
+	<classPathEntry location="/Users/zengwangming/workBench/maven/maven_repository/mysql/mysql-connector-java/5.1.5/mysql-connector-java-5.1.5.jar" />
+
+	<!-- defaultModelType定义MBG如何生成**实体类**；
+			conditional:*这是默认值*,这个模型和下面的hierarchical类似，除了如果那个单独的类将只包含一个字段，将不会生成一个单独的类。 
+						因此,如果一个表的主键只有一个字段,那么不会为该字段生成单独的实体类,会将该字段合并到基本实体类中。
+			hierarchical:如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段， 
+						则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。 MBG会在所有生成的实体类之间维护一个继承关系。
+			flat:该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。**这种模型最简单，推荐使用。**
+		targetRuntime:此属性用于指定生成的代码的运行时环境。该属性支持以下可选值：
+			MyBatis3:*这是默认值*
+			MyBatis3Simple
+			Ibatis2Java2
+			Ibatis2Java5 一般情况下使用默认值即可，有关这些值的具体作用以及区别请查看中文文档的详细内容。
+	 -->
+	<context id="glass-service" defaultModelType="flat" targetRuntime="MyBatis3">
+		<!-- MBG会自动给表名或字段名添加**分隔符** 针对存在空格或者关键字等情况-->
+		<property name="autoDelimitKeywords" value="true"/>
+		<!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+		<property name="beginningDelimiter" value="`"/>
+		<property name="endingDelimiter" value="`"/> 
+		<!-- 设置要使用的Java文件的编码，默认使用当前平台的编码 -->
+		<property name="javaFileEncoding" value="UTF-8"/> 
+		
+		<!-- javaFormatter和xmlFormatter属性**可能会**很有用，如果想使用模板来定制生成的java文件和xml文件的样式 -->
+		<!-- 格式化java代码 -->
+    		<property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+    		<!-- 格式化XML代码 -->
+    		<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+		
+		<!-- 配置插件 -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="com.mybatis.generator.plugin.MyOverIsMergeablePlugin" />
+		<plugin type="com.mybatis.generator.plugin.MyMapperAnnotationPlugin" />
+		<plugin type="com.mybatis.generator.plugin.MyToStringPlugin" />
+		<!-- <plugin type="com.mybatis.generator.plugin.MyInsertElementGeneratedPlugin" /> -->
+
+		<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+		<commentGenerator type="com.mybatis.generator.plugin.MyCommentGenerator">
+			<property name="suppressDate" value="true"/>
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+
+		<!-- 数据库配置 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" 
+						connectionURL="jdbc:mysql://127.0.0.1:3306/glasses"
+						userId="root" 
+						password="root">
+		</jdbcConnection>
+
+		<!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 
+			和 NUMERIC 类型解析为java.math.BigDecimal 
+			默认情况下的转换规则为：
+
+			如果精度>0或者长度>18，就会使用java.math.BigDecimal
+			如果精度=0并且10<=长度<=18，就会使用java.lang.Long
+			如果精度=0并且5<=长度<=9，就会使用java.lang.Integer
+			如果精度=0并且长度<5，就会使用java.lang.Short
+			-->
+		<javaTypeResolver type="com.mybatis.generator.plugin.MyJavaTypeResolverDefaultImpl">
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- 生成模型的包名和位置 -->
+		<javaModelGenerator targetPackage="cn.com.zach.demo.glasses.dto"
+			targetProject="./src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true"/>
+		</javaModelGenerator>
+		
+		<!-- 生成的映射文件包名和位置 -->
+		<sqlMapGenerator targetPackage="mapper"
+			targetProject="./src/main/resources" >
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<!-- 生成DAO的包名和位置 -->
+		<javaClientGenerator targetPackage="cn.com.zach.demo.glasses.mapper"
+			targetProject="./src/main/java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素
+	        选择的table会生成一下文件：
+	        1，SQL map文件
+	        2，生成一个主键类；
+	        3，除了BLOB和主键的其他字段的类；
+	        4，包含BLOB的类；
+	        5，一个用户生成动态查询的条件类（selectByExample, deleteByExample），可选；
+	        6，Mapper接口（可选）
+	
+	        tableName（必要）：要生成对象的表名；
+	        注意：大小写敏感问题。正常情况下，MBG会自动的去识别数据库标识符的大小写敏感度，在一般情况下，MBG会
+	            根据设置的schema，catalog或tablename去查询数据表，按照下面的流程：
+	            1，如果schema，catalog或tablename中有空格，那么设置的是什么格式，就精确的使用指定的大小写格式去查询；
+	            2，否则，如果数据库的标识符使用大写的，那么MBG自动把表名变成大写再查找；
+	            3，否则，如果数据库的标识符使用小写的，那么MBG自动把表名变成小写再查找；
+	            4，否则，使用指定的大小写格式查询；
+	        另外的，如果在创建表的时候，使用的""把数据库对象规定大小写，就算数据库标识符是使用的大写，在这种情况下也会使用给定的大小写来创建表名；
+	        这个时候，请设置delimitIdentifiers="true"即可保留大小写格式；
+	
+	        可选：
+	        1，schema：数据库的schema；
+	        2，catalog：数据库的catalog；
+	        3，alias：为数据表设置的别名，如果设置了alias，那么生成的所有的SELECT SQL语句中，列名会变成：alias_actualColumnName
+	        4，domainObjectName：生成的domain类的名字，如果不设置，直接使用表名作为domain类的名字；可以设置为somepck.domainName，那么会自动把domainName类再放到somepck包里面；
+	        5，enableInsert（默认true）：指定是否生成insert语句；
+	        6，enableSelectByPrimaryKey（默认true）：指定是否生成按照主键查询对象的语句（就是getById或get）；
+	        7，enableSelectByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询语句；
+	        8，enableUpdateByPrimaryKey（默认true）：指定是否生成按照主键修改对象的语句（即update)；
+	        9，enableDeleteByPrimaryKey（默认true）：指定是否生成按照主键删除对象的语句（即delete）；
+	        10，enableDeleteByExample（默认true）：MyBatis3Simple为false，指定是否生成动态删除语句；
+	        11，enableCountByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询总条数语句（用于分页的总条数查询）；
+	        12，enableUpdateByExample（默认true）：MyBatis3Simple为false，指定是否生成动态修改语句（只修改对象中不为空的属性）；
+	        13，modelType：参考context元素的defaultModelType，相当于覆盖；
+	        14，delimitIdentifiers：参考tableName的解释，注意，默认的delimitIdentifiers是双引号，如果类似MYSQL这样的数据库，使用的是`（反引号，那么还需要设置context的beginningDelimiter和endingDelimiter属性）
+	        15，delimitAllColumns：设置是否所有生成的SQL中的列名都使用标识符引起来。默认为false，delimitIdentifiers参考context的属性
+	
+	        注意，table里面很多参数都是对javaModelGenerator，context等元素的默认属性的一个复写；
+	     -->
+	     <!-- <table tableName="%">
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table> -->
+		<!-- <table schema="glasses" tableName="tb_admin_menu" domainObjectName="AdminMenu"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			如果设置为true，生成的model类会直接使用column本身的名字，而不会再使用驼峰命名方法，比如BORN_DATE，生成的属性名字就是BORN_DATE,而不会是bornDate
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+			
+			参考 javaModelGenerator 的 constructorBased属性
+        		<property name="constructorBased" value="false"/>
+        		默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema；
+        		<property name="ignoreQualifiersAtRuntime" value="false"/>
+        		for MyBatis3 / MyBatis3Simple
+	            是否创建一个不可变的类，如果为true，
+	            那么MBG会创建一个没有setter方法的类，取而代之的是类似constructorBased的类
+	        
+       	 	<property name="immutable" value="false"/>
+			指定是否只生成domain类，如果设置为true，只生成domain类，如果还配置了sqlMapGenerator，那么在mapper XML文件中，只生成resultMap元素
+        		<property name="modelOnly" value="false"/>
+		</table>  -->
+		
+		<table schema="glasses" tableName="tb_admin_menu" domainObjectName="AdminMenu"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		
+		<table schema="glasses" tableName="tb_admin_role" domainObjectName="AdminRole"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		
+		<table schema="glasses" tableName="tb_admin_role_menu" domainObjectName="AdminRoleMenu"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		
+		<table schema="glasses" tableName="tb_admin_user" domainObjectName="AdminUser"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		
+		<table schema="glasses" tableName="tb_admin_user" domainObjectName="AdminUser"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		
+		<table schema="glasses" tableName="tb_admin_user_role" domainObjectName="AdminUserRole"
+			enableCountByExample="true" enableSelectByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="false" selectByExampleQueryId="false" >
+			<property name="useActualColumnNames" value="false" />	
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		
+	</context>
+</generatorConfiguration>
