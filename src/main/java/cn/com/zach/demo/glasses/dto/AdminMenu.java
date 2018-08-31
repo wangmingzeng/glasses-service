@@ -1,7 +1,6 @@
 package cn.com.zach.demo.glasses.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class AdminMenu implements Serializable {
@@ -24,7 +23,7 @@ public class AdminMenu implements Serializable {
      *
      * @mbg.generated
      */
-    private String names;
+    private String name;
 
     /**
      * 菜单url
@@ -46,13 +45,6 @@ public class AdminMenu implements Serializable {
      * @mbg.generated
      */
     private Date ctime;
-
-    /**
-     * 积分
-     *
-     * @mbg.generated
-     */
-    private BigDecimal integral;
 
     /**
      *
@@ -89,17 +81,17 @@ public class AdminMenu implements Serializable {
     }
 
     /**
-     * @return names 菜单名称
+     * @return name 菜单名称
      */
-    public String getNames() {
-        return names;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param names 菜单名称
+     * @param name 菜单名称
      */
-    public void setNames(String names) {
-        this.names = names == null ? null : names.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     /**
@@ -144,20 +136,6 @@ public class AdminMenu implements Serializable {
         this.ctime = ctime;
     }
 
-    /**
-     * @return integral 积分
-     */
-    public BigDecimal getIntegral() {
-        return integral;
-    }
-
-    /**
-     * @param integral 积分
-     */
-    public void setIntegral(BigDecimal integral) {
-        this.integral = integral;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -166,11 +144,10 @@ public class AdminMenu implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", pid=").append(pid);
-        sb.append(", names=").append(names);
+        sb.append(", name=").append(name);
         sb.append(", url=").append(url);
         sb.append(", sorter=").append(sorter);
         sb.append(", ctime=").append(ctime);
-        sb.append(", integral=").append(integral);
         sb.append("]");
         return sb.toString();
     }

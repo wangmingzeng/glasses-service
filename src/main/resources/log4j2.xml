@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+
+	<CustomLevels>
+		<CustomLevel name="DISCARD" intLevel="350" />
+	</CustomLevels>
+	
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36} %M() @%L - %m%n" />
+			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+			<Filters>
+				<ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</Console>
+		
+		<!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
+		<RollingFile name="RollingFile" fileName="logs/zx-point.log" filePattern="logs/$${date:yyyy-MM}/point-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36} %M() @%L - %m%n" />
+			<SizeBasedTriggeringPolicy size="20MB" />
+			<Filters>
+				<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingFile>
+		
+		<!-- 记录丢弃的积分事件，单独存放； 可以有选择的输出某个级别以上的类别  onMatch="ACCEPT" onMismatch="DENY"意思是匹配就接受,否则直接拒绝  -->
+		<RollingFile name="DiscardFile" fileName="logs/discard/zx-discard.log" filePattern="logs/discard/$${date:yyyy-MM}/point-%d{yyyy-MM-dd}-%i.discard.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36} %M() @%L - %m%n" />
+			<SizeBasedTriggeringPolicy size="20MB" />
+			<Filters>
+				<ThresholdFilter level="DISCARD" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingFile>
+		
+	</Appenders>
+	<Loggers>
+		<Root level="INFO">
+			<appender-ref ref="Console" />
+			<appender-ref ref="RollingFile" />
+			<appender-ref ref="DiscardFile" />
+		</Root>
+	</Loggers>
+</Configuration>

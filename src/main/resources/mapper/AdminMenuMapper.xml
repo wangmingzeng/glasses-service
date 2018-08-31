@@ -4,11 +4,10 @@
   <resultMap id="BaseResultMap" type="cn.com.zach.demo.glasses.dto.AdminMenu">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
-    <result column="names" jdbcType="VARCHAR" property="names" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="sorter" jdbcType="INTEGER" property="sorter" />
     <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
-    <result column="integral" jdbcType="DECIMAL" property="integral" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, pid, `names`, url, sorter, ctime, integral
+    id, pid, `name`, url, sorter, ctime
   </sql>
   <select id="selectByExample" parameterType="cn.com.zach.demo.glasses.dto.AdminMenuExample" resultMap="BaseResultMap">
     select
@@ -100,12 +99,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_admin_menu (pid, `names`, url, 
-      sorter, ctime, integral
-      )
-    values (#{pid,jdbcType=BIGINT}, #{names,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
-      #{sorter,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{integral,jdbcType=DECIMAL}
-      )
+    insert into tb_admin_menu (pid, `name`, url, 
+      sorter, ctime)
+    values (#{pid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{sorter,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.com.zach.demo.glasses.dto.AdminMenu">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -116,8 +113,8 @@
       <if test="pid != null">
         pid,
       </if>
-      <if test="names != null">
-        `names`,
+      <if test="name != null">
+        `name`,
       </if>
       <if test="url != null">
         url,
@@ -128,16 +125,13 @@
       <if test="ctime != null">
         ctime,
       </if>
-      <if test="integral != null">
-        integral,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="pid != null">
         #{pid,jdbcType=BIGINT},
       </if>
-      <if test="names != null">
-        #{names,jdbcType=VARCHAR},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
@@ -147,9 +141,6 @@
       </if>
       <if test="ctime != null">
         #{ctime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="integral != null">
-        #{integral,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -168,8 +159,8 @@
       <if test="record.pid != null">
         pid = #{record.pid,jdbcType=BIGINT},
       </if>
-      <if test="record.names != null">
-        `names` = #{record.names,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.url != null">
         url = #{record.url,jdbcType=VARCHAR},
@@ -180,9 +171,6 @@
       <if test="record.ctime != null">
         ctime = #{record.ctime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.integral != null">
-        integral = #{record.integral,jdbcType=DECIMAL},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -192,11 +180,10 @@
     update tb_admin_menu
     set id = #{record.id,jdbcType=BIGINT},
       pid = #{record.pid,jdbcType=BIGINT},
-      `names` = #{record.names,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
       url = #{record.url,jdbcType=VARCHAR},
       sorter = #{record.sorter,jdbcType=INTEGER},
-      ctime = #{record.ctime,jdbcType=TIMESTAMP},
-      integral = #{record.integral,jdbcType=DECIMAL}
+      ctime = #{record.ctime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -207,8 +194,8 @@
       <if test="pid != null">
         pid = #{pid,jdbcType=BIGINT},
       </if>
-      <if test="names != null">
-        `names` = #{names,jdbcType=VARCHAR},
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
@@ -219,20 +206,16 @@
       <if test="ctime != null">
         ctime = #{ctime,jdbcType=TIMESTAMP},
       </if>
-      <if test="integral != null">
-        integral = #{integral,jdbcType=DECIMAL},
-      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.com.zach.demo.glasses.dto.AdminMenu">
     update tb_admin_menu
     set pid = #{pid,jdbcType=BIGINT},
-      `names` = #{names,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       sorter = #{sorter,jdbcType=INTEGER},
-      ctime = #{ctime,jdbcType=TIMESTAMP},
-      integral = #{integral,jdbcType=DECIMAL}
+      ctime = #{ctime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

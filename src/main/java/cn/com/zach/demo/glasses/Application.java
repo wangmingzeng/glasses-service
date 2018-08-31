@@ -2,22 +2,33 @@ package cn.com.zach.demo.glasses;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Controller;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@SpringBootApplication
+import cn.com.zach.demo.glasses.common.property.PropertiesSourceInitializer;
+import cn.com.zach.demo.glasses.mode.Result;
+
+
+@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
+@RestController
 public class Application {
-	
-	@ResponseBody
+
 	@RequestMapping("/")
 	public String index() {
-		return "Hello World";
+		return "glasses index";
 	}
-
-    public static void main(String[] args) {
-        // 启动服务
-        SpringApplication.run(Application.class, args);
-    }
+	
+	@RequestMapping("/healthy")
+	public Result healthy() {
+		return Result.success("Service is alive.");
+	}
+	
+	public static void main(String[] args) {
+		SpringApplication sa = new SpringApplication(Application.class);
+		sa.addInitializers(new PropertiesSourceInitializer());
+		sa.run(args);
+		System.out.println("System boot up...");
+	}
 }
