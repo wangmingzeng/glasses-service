@@ -99,6 +99,10 @@ public class LocalProperties extends DynamicProperties {
 				}
 			}
 			File classpath = new File(classLoader.getResource("").getFile());
+			if(classpath != null && classpath.getPath().endsWith("test-classes")) {	
+				//处理单元测试时读取不到正确路径下的配置文件
+				classpath = new File(classpath.getParent() + File.separator + "classes");
+			}
 			answer.add(classpath);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -36,7 +36,7 @@ public class MongoConfig {
 	private String authenticationDatabase = SystemMessage.getString("spring.datasource.mongo.custom.authenticationDatabase");
 	private Integer minConnectionsPerHost = SystemMessage.getInteger("spring.datasource.mongo.custom.minConnectionsPerHost");
 	private Integer connectionsPerHost = SystemMessage.getInteger("spring.datasource.mongo.custom.connectionsPerHost");
-
+	
 	@Bean
 	public MongoDbFactory mongoDbFactory() {
 		MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
