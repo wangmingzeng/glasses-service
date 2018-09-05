@@ -1,4 +1,4 @@
-package cn.com.zach.demo.glasses.service;
+package cn.com.zach.demo.glasses.common.utils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,15 +16,13 @@ import org.springframework.stereotype.Component;
 
 import com.mongodb.WriteResult;
 
-import cn.com.zach.demo.glasses.common.utils.StringUtil;
 import cn.com.zach.demo.glasses.mode.PageInfo;
 
 
 @Component
-public class MongoService<T> {
+public class MongoFacade<T> {
 
-	@Autowired
-	private MongoTemplate mongoTemplate;
+	private static MongoTemplate mongoTemplate = BeanFactory.getBean(MongoTemplate.class);
 	
 	public void insert(T t) {
 		mongoTemplate.insert(t);

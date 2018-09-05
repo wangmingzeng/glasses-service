@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import cn.com.zach.demo.glasses.Application;
 import cn.com.zach.demo.glasses.common.property.PropertiesSourceInitializer;
-import cn.com.zach.demo.glasses.service.MongoService;
+import cn.com.zach.demo.glasses.common.utils.MongoFacade;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -18,7 +18,7 @@ import cn.com.zach.demo.glasses.service.MongoService;
 public class MongoUnitTest extends AbstractJUnit4SpringContextTests{
 
 	@Autowired
-	private MongoService<User> mongoService;
+	private MongoFacade<User> mongoService;
 	
 	@Test
 	public void testMock() {
